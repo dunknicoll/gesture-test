@@ -1,8 +1,14 @@
 class SampleListener extends Listener {
 
-  Vector lastPos;
-  Vector lastVel;
-  boolean hasHands;
+  Vector palm1Pos;
+  Vector palm1Vel;
+  Vector finger1Pos;
+  Vector finger1Vel;
+
+  Vector palm2Pos;
+  Vector palm2Vel;
+  Vector finger2Pos;
+  Vector finger2Vel;
   boolean connected = false;
 
 
@@ -27,24 +33,37 @@ class SampleListener extends Listener {
 
     if (!frame.hands().empty()) {
       // Get the first hand
-      Hand hand = frame.hands().get(0);
-      hasHands = true;
+      Hand hand1 = frame.hands().get(0);
+      Hand hand2 = frame.hands().get(1);
 
-      // Check if the hand has any fingers
-      FingerList fingers = hand.fingers();
-      if (!fingers.empty()) {
-        // Calculate the hand's average finger tip position
-        Vector pos = Vector.zero();
-        Vector vel = Vector.zero();
-        for (Finger finger : fingers) {
-          pos = pos.plus(finger.tipPosition());
-          vel = vel.plus(finger.tipVelocity());
-        }
-        pos = pos.divide(fingers.count());
-        vel = vel.divide(fingers.count());
-        
-        lastPos = pos;
-        lastVel = vel;
+      Vector pvel1 = Vector.zero();
+      Vector ppos1 = Vector.zero();
+      pvel1 = hand1.palmVelocity();
+      ppos1 = hand1.palmPosition();
+
+      palm1Pos = ppos1;
+      palm1Vel = pvel1;
+
+      Vector pvel2 = Vector.zero();
+      Vector ppos2 = Vector.zero();
+      pvel2 = hand2.palmVelocity();
+      ppos2 = hand2.palmPosition();
+
+      palm2Pos = ppos2;
+      palm2Vel = pvel2;
+
+      FingerList fingers1 = hand1.fingers();
+      if (!fingers1.empty())
+      {
+        Finger fi1 = fingers1.get(0);
+        finger1Pos = fi1.tipPosition();
+      }
+
+      FingerList fingers2 = hand2.fingers();
+      if (!fingers2.empty())
+      {
+        Finger fi2 = fingers2.get(0);
+        finger2Pos = fi2.tipPosition();
       }
     }
   }
